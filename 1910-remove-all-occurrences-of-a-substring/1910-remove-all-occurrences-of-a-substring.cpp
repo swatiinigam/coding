@@ -20,7 +20,7 @@ public:
 class Solution {
 public:
     string removeOccurrences(string s, string part) {
-        size_t found = s.find(part);
+        int found = s.find(part);
         while (found != string::npos) {
             s.erase(found, part.size());
             found = s.find(part);
@@ -28,3 +28,4 @@ public:
         return s;
     }
 };
+
