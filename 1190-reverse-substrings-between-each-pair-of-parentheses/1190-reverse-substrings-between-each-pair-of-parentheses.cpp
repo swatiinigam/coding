@@ -1,27 +1,31 @@
+#include <string>
+#include <stack>
+#include <algorithm>
+
+using namespace std;
+
 class Solution {
-int i = 0;
 public:
     string reverseParentheses(string s) {
-        return helper(s);
-    }
-
-    string helper(string& s) {
-        string result;
-
-        while (i < s.length()) {
-            if (s[i] == ')') {
-                i++;
-                reverse(result.begin(), result.end());
-                return result;
-            } else if (s[i] == '(') {
-                i++;
-                string st = helper(s);
-                result += st;
+        stack<string> st;
+        string current;
+        
+        for (char c : s) {
+            if (c == '(') {
+                // Push the current string to stack and start a new one
+                st.push(current);
+                current = "";
+            } else if (c == ')') {
+                // Reverse the current string and append it to the top of the stack
+                reverse(current.begin(), current.end());
+                current = st.top() + current;
+                st.pop();
             } else {
-                result += s[i];
-                i++;
+                // Append character to current string
+                current += c;
             }
         }
-        return result;
+        
+        return current;
     }
 };
