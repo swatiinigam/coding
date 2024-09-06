@@ -9,28 +9,24 @@
  * };
  */
 class Solution {
+
 public:
     ListNode* deleteDuplicates(ListNode* head) {
-        if (head == nullptr || head->next == nullptr)
-            return head;
-        
         ListNode* curr = head;
-        ListNode* temp = curr->next;
-        
-        while (temp != nullptr) {
-            if (curr->val == temp->val) {
-                if (temp->next != nullptr) {
-                    temp = temp->next;
-                    curr->next = temp;
-                } else {
-                    curr->next = nullptr;
-                    break;
+
+        while (curr != nullptr && curr->next != nullptr) {
+            ListNode* forw = curr->next;
+            if (curr->val == forw->val) {
+                // Skip all duplicate nodes
+                while (forw != nullptr && curr->val == forw->val) {
+                    forw = forw->next;
                 }
+                curr->next = forw; // Link to the next unique value
             } else {
-                temp = temp->next;
-                curr = curr->next;
+                curr = curr->next; // Move to the next node
             }
         }
+        
         return head;
     }
 };
