@@ -3,40 +3,43 @@
 using namespace std;
 
 class Solution {
-public:
-    void dfs(int node, vector<vector<int>>& adj, vector<bool>& visited) {
-        visited[node] = true;
-        for (int neighbor : adj[node]) {
-            if (!visited[neighbor]) {
-                dfs(neighbor, adj, visited);
+private:
+    void dfs(int node, unordered_map<int, list<int>>& adj, vector<bool>& vis) {
+        vis[node] = true;
+        for (auto neighbor : adj[node]) {
+            if (!vis[neighbor]) {
+                dfs(neighbor, adj, vis);
             }
         }
     }
 
+public:
     int makeConnected(int n, vector<vector<int>>& connections) {
-        // If there are not enough connections, return -1
+        // If there are not enough cables to connect all computers
         if (connections.size() < n - 1) {
             return -1;
         }
 
-        // Create the adjacency list
-        vector<vector<int>> adj(n);
-        for (const auto& conn : connections) {
-            adj[conn[0]].push_back(conn[1]);
-            adj[conn[1]].push_back(conn[0]);
+        // Create the adjacency list for the undirected graph
+        unordered_map<int, list<int>> adj;
+        for (auto it : connections) {
+            adj[it[0]].push_back(it[1]);
+            adj[it[1]].push_back(it[0]);
         }
 
-        // Count the number of connected components using DFS
-        vector<bool> visited(n, false);
+        // Array to keep track of visited nodes
+        vector<bool> vis(n, false);
+
+        // Count the number of connected components
         int components = 0;
         for (int i = 0; i < n; ++i) {
-            if (!visited[i]) {
-                ++components;
-                dfs(i, adj, visited);
+            if (!vis[i]) {
+                components++;
+                dfs(i, adj, vis);
             }
         }
 
-        // Minimum operations needed is the number of components - 1
+        // Number of operations needed to connect all components is components - 1
         return components - 1;
     }
 };
